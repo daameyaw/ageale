@@ -1,0 +1,82 @@
+{
+  "company_name": "David",
+  "industry": "rural_fields",
+  "company_email": "david@gmail.com",
+  "purpose": "film",
+  "budget_range_string": "40",
+  "experience_level": "2",
+  "budget_range_min": 3000,
+  "budget_range_max": 10000,
+  "flight_time": 20,
+  "flight_range": 5,
+  "camera_quality": 1080,
+  "obstacle_avoidance": "Yes",
+  "autonomous_features": [
+    "Follow Me Mode",
+    "Geofencing"
+  ],
+  "portability": "Regular Drone",
+  "connectivity_options": [
+    "WiFi",
+    "5G / LTE"
+  ],
+  "live_streaming": "No",
+  "payload_capacity": "3000",
+  "wind_resistance": "0",
+  "night_vision": "Yes"
+}
+
+autonomous_features
+: 
+(5) ['Object Tracking', 'Return to Home', 'GPS Waypoint Navigation', 'Geofencing', 'Follow Me Mode']
+camera_quality
+: 
+6000
+company_email
+: 
+"Orpha45@hotmail.com"
+company_name
+: 
+"Murazik, Friesen and Conroy"
+connectivity_options
+: 
+(2) ['Mobile App', 'WiFi']
+experience_level
+: 
+3
+flight_range
+: 
+80
+flight_time
+: 
+50
+industry
+: 
+"agriculture"
+live_streaming
+: 
+"Yes"
+night_vision
+: 
+"Yes"
+obstacle_avoidance
+: 
+"No"
+operating_environment
+: 
+"urban_areas"
+payload_capacity
+: 
+8670
+portability
+: 
+"Regular Drone"
+price
+: 
+155450
+purpose
+: 
+"research"
+wind_resistance
+: 
+8

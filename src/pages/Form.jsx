@@ -24,6 +24,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import getDrones from "../services/apiDrones";
+import { generateMultipleDroneData } from "../data/dronesData";
+import supabase from "../config/supabase";
 
 const steps = [
   "Basic Info",
@@ -44,12 +46,12 @@ const MenuProps = {
 };
 
 const marks = [
-  { value: 0, label: "$500" },
-  { value: 20, label: "$1,000" },
-  { value: 40, label: "$3,000" },
-  { value: 60, label: "$5,000" },
-  { value: 80, label: "$10,000" },
-  { value: 100, label: "$10,000+" },
+  { value: 0, label: "$500", figure: 500 },
+  { value: 20, label: "$1,000", figure: 1000 },
+  { value: 40, label: "$3,000", figure: 3000 },
+  { value: 60, label: "$5,000", figure: 5000 },
+  { value: 80, label: "$10,000", figure: 10000 },
+  { value: 100, label: "20,000+", figure: 20000 },
 ];
 
 const valuetext = (value) => {
@@ -57,52 +59,58 @@ const valuetext = (value) => {
     const nextMark = marks[index + 1];
     return value >= mark.value && (!nextMark || value < nextMark.value);
   });
-  return mark?.label || "";
+  return mark?.figure || "";
 };
 
-const formatBudgetRange = (values) => {
+const formatBudgetRangeMin = (values) => {
   const minValue = valuetext(values?.[0]);
+  // const maxValue = valuetext(values?.[1]);
+  console.log(typeof minValue, minValue);
+  return minValue;
+};
+
+const formatBudgetRangeMax = (values) => {
+  // const minValue = valuetext(values?.[0]);
   const maxValue = valuetext(values?.[1]);
-  return `${minValue} - ${maxValue}`;
+  console.log(maxValue);
+  return maxValue;
 };
 
 const FLIGHT_TIME_OPTIONS = [
-  "Less than 10 minutes",
-  "10 - 20 minutes",
-  "20 - 40 minutes",
-  "40 - 60 minutes",
-  "More than 60 minutes",
+  { label: "Less than 10 minutes", value: 0 },
+  { label: "10 - 20 minutes", value: 10 },
+  { label: "20 - 40 minutes", value: 20 },
+  { label: "40 - 60 minutes", value: 40 },
+  { label: "More than 60 minutes", value: 60 },
 ];
-
 const FLIGHT_RANGE_OPTIONS = [
-  "Below 1km",
-  "1 - 5 km",
-  "5 - 10 km",
-  "More than 10 km",
+  { label: "Below 1km", value: 0 },
+  { label: "1 - 5 km", value: 1 },
+  { label: "5 - 10 km", value: 5 },
+  { label: "More than 10 km", value: 10 },
 ];
 
 const CAMERA_QUALITY_OPTIONS = [
-  "No camera needed",
-  "720p (HD)",
-  "1080p (Full HD)",
-  "4K (Ultra HD)",
-  "6K or higher",
-  "Thermal / Infrared Camera",
+  { label: "No camera needed", value: 0 },
+  { label: "720p (HD)", value: 720 },
+  { label: "1080p (Full HD)", value: 1080 },
+  { label: "4K (Ultra HD)", value: 4000 },
+  { label: "6K or higher", value: 6000 },
+  { label: "Thermal / Infrared Camera", value: -1 }, // Special category
 ];
-
 const PAYLOAD_CAPACITY_OPTIONS = [
-  "No payload required",
-  "Less than 500g",
-  "500g - 1kg",
-  "1kg - 3kg",
-  "More than 3kg",
+  { label: "No payload required", value: 0 }, // No payload is essentially 0
+  { label: "Less than 500g", value: 500 },
+  { label: "500g - 1kg", value: 1000 },
+  { label: "1kg - 3kg", value: 3000 },
+  { label: "More than 3kg", value: 5000 }, // You can use 5000 as a max or any higher value depending on your needs
 ];
 
 const WIND_RESISTANCE_OPTIONS = [
-  "Low (0-10 mph)",
-  "Medium (10-20 mph)",
-  "High (20-30 mph)",
-  "Extreme (30+ mph)",
+  { label: "Low (0-10 mph)", value: 0 }, // Use the lower bound of the range (0 mph)
+  { label: "Medium (10-20 mph)", value: 10 }, // Use the lower bound (10 mph)
+  { label: "High (20-30 mph)", value: 20 }, // Use the lower bound (20 mph)
+  { label: "Extreme (30+ mph)", value: 30 }, // Use the lower bound (30 mph)
 ];
 
 const AUTONOMOUS_FEATURES = [
@@ -121,12 +129,12 @@ const CONNECTIVITY_OPTIONS = [
 ];
 
 function Form() {
-  const { isLoading, data: drones } = useQuery({
-    queryKey: ["drones"],
-    queryFn: getDrones,
-  });
+  // const { isLoading, data: drones } = useQuery({
+  //   queryKey: ["drones"],
+  //   queryFn: getDrones,
+  // });
 
-  console.log(drones);
+  // console.log(drones);
 
   const [activeStep, setActiveStep] = useState(0);
   const {
@@ -138,13 +146,15 @@ function Form() {
   } = useForm({
     // defaultValues: {
     //   budget_range: [20, 60],
-    budget_range_string: "$1,000 - $5,000",
+    // budget_range_string: "$1000 - $5000",
+    budget_range_min: 1000,
+    budget_range_max: 5000,
     //   flight_time: "",
     //   flight_range: "",
     //   camera_quality: "",
     //   payload_capacity: "",
     //   wind_resistance: "",
-    //   obstacle_avoidance: false,
+    obstacle_avoidance: "No",
     //   autonomous_features: [],
     //   connectivity_options: [],
     //   live_streaming: false,
@@ -164,14 +174,32 @@ function Form() {
   };
 
   const onSliderChange = (event, newValue) => {
-    setValue("budget_range", newValue);
-    setValue("budget_range_string", formatBudgetRange(newValue));
+    console.log(newValue);
+    // setValue("budget_range", newValue);
+    setValue("budget_range_min", formatBudgetRangeMin(newValue));
+    setValue("budget_range_max", formatBudgetRangeMax(newValue));
   };
+
+  // const onSliderChange = (event, newValue) => {
+  //   console.log(newValue); // This should log a number or an array (if range)
+
+  //   setValue("budget_range", newValue); // Store the numeric value directly
+
+  //   // Ensure min and max values are stored separately if it's a range slider
+  //   if (Array.isArray(newValue)) {
+  //     setValue("budget_range_min", newValue[0]);
+  //     setValue("budget_range_max", newValue[1]);
+  //   } else {
+  //     setValue("budget_range_min", formatBudgetRangeMin(newValue));
+  //     setValue("budget_range_max", formatBudgetRangeMax(newValue));
+  //   }
+  // };
 
   const onSubmit = (data) => {
     const formattedData = {
       ...data,
-      budget_range: formatBudgetRange(data.budget_range),
+      // budget_range_min: formatBudgetRangeMin(data.budget_range_min),
+      // budget_range_max: formatBudgetRangeMax(data.budget_range_max),
     };
     console.log("Form submitted:", formattedData);
     handleNext();
@@ -179,6 +207,27 @@ function Form() {
       navigate("/results", { state: { formData: formattedData } });
     }
   };
+
+  // Generate one drone
+  const tenDrones = generateMultipleDroneData(10);
+
+  async function handleUploadDrones() {
+    try {
+      const { data, error } = await supabase
+        .from("Drones") // replace 'drones' with your actual table name
+        .insert(tenDrones);
+
+      if (error) {
+        console.error("Error uploading drones:", error);
+        // You might want to show an error message to the user here
+      } else {
+        console.log("Successfully uploaded drones:", data);
+        // You might want to show a success message to the user here
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <div>
@@ -199,6 +248,12 @@ function Form() {
               <h2 className="text-2xl font-semibold mb-2 p-4 pb-0">
                 PERSONAL INFORMATION
               </h2>
+              <button
+                onClick={handleUploadDrones}
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Upload drones
+              </button>
             </div>
 
             <div className="mb-4 flex justify-between gap-18 p-4">
@@ -229,8 +284,10 @@ function Form() {
                   <option value="agriculture">Agriculture</option>
                   <option value="construction">Construction</option>
                   <option value="defense">Defense</option>
-                  <option value="public_safety">Public Safety</option>
-                  <option value="forestry">Forestry</option>
+                  <option value="real_estate">Real Estate</option>
+                  <option value="film_media">Film & Media</option>
+                  <option value="surveying">Surveying & Mapping</option>
+                  <option value="research">Research & Education</option>
                 </select>
                 {errors.industry && (
                   <p className="text-red-400">{errors.industry.message}</p>
@@ -295,18 +352,10 @@ function Form() {
                   <option value="" disabled>
                     Select what you intend to use the drone for...
                   </option>
-                  <option value="Aerial_Photography_&_Videography">
-                    Aerial Photography & Videography
-                  </option>
-                  <option value="Surveying_&_Mapping">
-                    Surveying & Mapping
-                  </option>
-                  <option value="Agriculture_&_Farming">
-                    Agriculture & Farming
-                  </option>
-                  <option value="Delivery_&_Logistics">
-                    Delivery & Logistics
-                  </option>
+                  <option value="film">Aerial Photography & Videography</option>
+                  <option value="surveying">Surveying & Mapping</option>
+                  <option value="agriculture">Agriculture & Farming</option>
+                  <option value="research">Research </option>
                   {/* <option value="forestry">Forestry</option> */}
                 </select>
                 {errors.purpose && (
@@ -316,22 +365,18 @@ function Form() {
               <div className="w-1/2 flex flex-col gap-2">
                 <label className="">Operating Environment</label>
                 <select
-                  {...register("industry", {
-                    required: "Please select an industry",
+                  {...register("operating_environment", {
+                    required: "Please select an operating environ",
                   })}
                   className="border p-1 border-gray-200 rounded"
                 >
                   <option value="" disabled>
                     Select an operating environment
                   </option>
-                  <option value="Urban_Areas">Urban Areas</option>
-                  <option value="Rural_&_OpenFields">
-                    Rural & Open Fields
-                  </option>
-                  <option value="Forests_&_Mountains">
-                    Forests & Mountains
-                  </option>
-                  <option value="Industrial_Sites">Industrial Sites</option>
+                  <option value="urban_areas">Urban Areas</option>
+                  <option value="rural_fields">Rural & Open Fields</option>
+                  <option value="forests_mountains">Forests & Mountains</option>
+                  <option value="industrial_sites">Industrial Sites</option>
                   {/* <option value="forestry">Forestry</option> */}
                 </select>
                 {errors.environment && (
@@ -343,7 +388,7 @@ function Form() {
               <label className="font-medium">Budget Range</label>
               <div className="px-4 py-6">
                 <Slider
-                  {...register("budget_range")}
+                  {...register("budget_range_string")}
                   aria-label="Budget Range"
                   defaultValue={[20, 60]}
                   valueLabelDisplay="auto"
@@ -372,31 +417,37 @@ function Form() {
                   }}
                 />
               </div>
-              {errors.budget_range && (
-                <p className="text-red-400">{errors.budget_range.message}</p>
+              {errors.budget_range_string && (
+                <p className="text-red-400">
+                  {errors.budget_range_string.message}
+                </p>
               )}
             </div>{" "}
             <div className="mb-4 flex flex-col gap-2 p-4">
               <label className="font-medium mb-2">Level of Experience</label>
               <div className="flex flex-col gap-3">
-                {["Beginner", "Intermediate", "Advanced", "Professional"].map(
-                  (level) => (
-                    <label
-                      key={level}
-                      className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-                    >
-                      <input
-                        type="radio"
-                        value={level}
-                        {...register("experience_level", {
-                          required: "Please select your experience level",
-                        })}
-                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700">{level}</span>
-                    </label>
-                  )
-                )}
+                {[
+                  { label: "Beginner", value: 1 },
+                  { label: "Intermediate", value: 2 },
+                  { label: "Advanced", value: 3 },
+                  { label: "Professional", value: 4 },
+                ].map(({ label, value }) => (
+                  <label
+                    key={value}
+                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                  >
+                    <input
+                      type="radio"
+                      value={Number(value)}
+                      {...register("experience_level", {
+                        required: "Please select your experience level",
+                        valueAsNumber: true, // Ensures the value is stored as a number
+                      })}
+                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="text-gray-700">{label}</span>
+                  </label>
+                ))}
               </div>
               {errors.experience_level && (
                 <p className="text-red-400 mt-1">
@@ -438,13 +489,14 @@ function Form() {
                 <select
                   {...register("flight_time", {
                     required: "Flight time is required",
+                    valueAsNumber: true, // Ensures the value is stored as a number
                   })}
                   className="border p-2 rounded-md"
                 >
                   <option value="">Select flight time...</option>
-                  {FLIGHT_TIME_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {FLIGHT_TIME_OPTIONS.map(({ label, value }) => (
+                    <option key={value} value={value}>
+                      {label}
                     </option>
                   ))}
                 </select>
@@ -452,41 +504,41 @@ function Form() {
                   <p className="text-red-400">{errors.flight_time.message}</p>
                 )}
               </div>
-
               {/* Flight Range Dropdown */}
               <div className="flex flex-col gap-2">
                 <label className="font-medium">📏 Maximum Flight Range</label>
                 <select
                   {...register("flight_range", {
                     required: "Flight range is required",
+                    valueAsNumber: true, // Ensures the value is stored as a number
                   })}
                   className="border p-2 rounded-md"
                 >
                   <option value="">Select flight range...</option>
-                  {FLIGHT_RANGE_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {FLIGHT_RANGE_OPTIONS.map(({ label, value }) => (
+                    <option key={value} value={value}>
+                      {label}
                     </option>
                   ))}
                 </select>
                 {errors.flight_range && (
                   <p className="text-red-400">{errors.flight_range.message}</p>
                 )}
-              </div>
-
+              </div>{" "}
               {/* Camera Quality Dropdown */}
               <div className="flex flex-col gap-2">
-                <label className="font-medium">📸 Camera Quality</label>
+                <label className="font-medium">📷 Camera Quality</label>
                 <select
                   {...register("camera_quality", {
                     required: "Camera quality is required",
+                    valueAsNumber: true, // Ensures the value is stored as a number
                   })}
                   className="border p-2 rounded-md"
                 >
                   <option value="">Select camera quality...</option>
-                  {CAMERA_QUALITY_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  {CAMERA_QUALITY_OPTIONS.map(({ label, value }) => (
+                    <option key={value} value={value}>
+                      {label}
                     </option>
                   ))}
                 </select>
@@ -495,8 +547,7 @@ function Form() {
                     {errors.camera_quality.message}
                   </p>
                 )}
-              </div>
-
+              </div>{" "}
               {/* Toggle Switches */}
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
@@ -504,20 +555,23 @@ function Form() {
                     🛡 Obstacle Avoidance System
                   </label>
                   <div className="flex gap-4">
-                    {["Yes", "No"].map((option) => (
+                    {[
+                      { label: "Yes", value: true },
+                      { label: "No", value: false },
+                    ].map((option) => (
                       <label
-                        key={option}
+                        key={option.label}
                         className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
                       >
                         <input
                           type="radio"
-                          value={option}
+                          value={option.value}
                           {...register("obstacle_avoidance", {
                             required: "Please select an option",
                           })}
                           className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                         />
-                        <span className="text-gray-700">{option}</span>
+                        <span className="text-gray-700">{option.label}</span>
                       </label>
                     ))}
                   </div>
@@ -528,7 +582,6 @@ function Form() {
                   )}{" "}
                 </div>
               </div>
-
               {/* Autonomous Features Checkboxes */}
               <div className="col-span-2">
                 <label className="font-medium block mb-2">
@@ -548,7 +601,6 @@ function Form() {
                   ))}
                 </div>
               </div>
-
               {/* Portability Radio Buttons */}
               <div className="col-span-2">
                 <label className="font-medium block mb-2">
@@ -570,7 +622,6 @@ function Form() {
                   ))}
                 </div>
               </div>
-
               {/* Connectivity Options Checkboxes */}
               <div className="flex flex-col gap-2">
                 <label className="font-medium">📶 Connectivity Options</label>
@@ -591,27 +642,29 @@ function Form() {
                   ))}
                 </div>
               </div>
-
               {/* Live Streaming Radio Buttons */}
               <div className="flex flex-col gap-2">
                 <label className="font-medium">
                   🎥 Live Streaming Capabilities
                 </label>
                 <div className="flex gap-4">
-                  {["Yes", "No"].map((option) => (
+                  {[
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
+                  ].map((option) => (
                     <label
-                      key={option}
+                      key={option.label}
                       className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
                     >
                       <input
                         type="radio"
-                        value={option}
+                        value={option.value}
                         {...register("live_streaming", {
                           required: "Please select an option",
                         })}
                         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                       />
-                      <span className="text-gray-700">{option}</span>
+                      <span className="text-gray-700">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -653,6 +706,7 @@ function Form() {
                 <select
                   {...register("payload_capacity", {
                     required: "Payload capacity is required",
+                    valueAsNumber: true,
                   })}
                   className="border p-1 border-gray-200 rounded"
                 >
@@ -660,8 +714,8 @@ function Form() {
                     Select payload capacity
                   </option>
                   {PAYLOAD_CAPACITY_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option.value} value={Number(option.value)}>
+                      {option.label}
                     </option>
                   ))}
                 </select>
@@ -683,8 +737,9 @@ function Form() {
                     Select wind resistance
                   </option>
                   {WIND_RESISTANCE_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option.label} value={Number(option.value)}>
+                      {/* Use the numeric value */}
+                      {option.label}
                     </option>
                   ))}
                 </select>
@@ -701,7 +756,7 @@ function Form() {
                 <label className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors">
                   <input
                     type="radio"
-                    value="Yes"
+                    value="TRUE"
                     {...register("night_vision")}
                     className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                   />
@@ -710,7 +765,7 @@ function Form() {
                 <label className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors">
                   <input
                     type="radio"
-                    value="No"
+                    value="FALSE"
                     {...register("night_vision")}
                     className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                   />
