@@ -84,11 +84,13 @@ export async function getMatchingDrones(userPreferences) {
     score: calculateDroneScore(drone, userPreferences)
   }));
 
-  console.log(rankedDrones)
+  const sortedDrones = rankedDrones.sort((a, b) => b.score - a.score);
+
+  console.log("Ranked" , rankedDrones)
 
   // Sort by score in descending order
-  // return rankedDrones.sort((a, b) => b.score - a.score);
-  return data
+  return sortedDrones;
+  // return data
 }
 
 // export async function getMatchingDrones(userPreferences) {

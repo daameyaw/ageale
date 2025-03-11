@@ -209,7 +209,7 @@ function Form() {
   };
 
   // Generate one drone
-  const tenDrones = generateMultipleDroneData(10);
+  const tenDrones = generateMultipleDroneData(15);
 
   async function handleUploadDrones() {
     try {
