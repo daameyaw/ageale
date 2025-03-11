@@ -36,7 +36,7 @@ const generateDroneData = () => ({
   // Technical Specs
   flight_time: Math.floor(faker.number.int({ min: 4, max: 120 }) / 10) * 10,
 
-  flight_range: Math.floor(faker.number.int({ min: 0, max: 50 }) / 1) * 5,
+  flight_range: Math.floor(faker.number.int({ min: 5, max: 50 }) / 1) * 5,
 
   camera_quality: faker.helpers.arrayElement([0, 720, 1080, 4000, 6000, -1]),
 
@@ -54,7 +54,7 @@ const generateDroneData = () => ({
     faker.number.int({ min: 1, max: 5 })
   ),
   portability: faker.helpers.arrayElement([
-    "Compact & Foldable",
+    // "Compact & Foldable",
     "Regular Drone",
   ]),
   connectivity_options: faker.helpers.arrayElements(
@@ -66,7 +66,7 @@ const generateDroneData = () => ({
 
   // Additional Details
   payload_capacity:
-    Math.floor(faker.number.int({ min: 0, max: 10000 }) / 10) * 10,
+    Math.floor(faker.number.int({ min: 500, max: 10000 }) / 10) * 10,
 
   wind_resistance: faker.number.int({ min: 5, max: 30 }),
   // night_vision: faker.helpers.arrayElement(["TRUE", "FALSE"]),
