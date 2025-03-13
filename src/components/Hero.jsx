@@ -72,7 +72,7 @@ const Hero = () => {
                 </Button>
                 <Button
                   component={Link}
-                  to="/contact"
+                  to="/form"
                   variant="outlined"
                   color="primary"
                   sx={{
@@ -83,7 +83,7 @@ const Hero = () => {
                     fontWeight: 600,
                   }}
                 >
-                  Contact Sales
+                 ✨ Let's help you find a drone
                 </Button>
               </Box>
             </motion.div>

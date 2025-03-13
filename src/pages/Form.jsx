@@ -129,12 +129,12 @@ const CONNECTIVITY_OPTIONS = [
 ];
 
 function Form() {
-  // const { isLoading, data: drones } = useQuery({
-  //   queryKey: ["drones"],
-  //   queryFn: getDrones,
-  // });
+  const { isLoading, data: drones } = useQuery({
+    queryKey: ["drones"],
+    queryFn: getDrones,
+  });
 
-  // console.log(drones);
+  console.log(drones);
 
   const [activeStep, setActiveStep] = useState(0);
   const {
@@ -230,8 +230,8 @@ function Form() {
   }
 
   return (
-    <div>
-      <div className="w-[80%] mx-auto  bg-white  mt-12">
+<div className=" bg-[url('/drone.jpg')] bg-cover bg-center h-full w-full">  
+    <div className="w-[80%] mx-auto    mt-12">
         <Stepper activeStep={activeStep}>
           {steps.map((label) => (
             <Step key={label}>

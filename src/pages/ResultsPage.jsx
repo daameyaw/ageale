@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useMatchDrones } from "../features/Drones/useMatchDrones";
 import { useNavigate } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 import React from "react";
 
 export default function ResultsPage() {
@@ -42,11 +43,31 @@ export default function ResultsPage() {
         </h2>
 
         {isLoading ? (
-          <p className="text-gray-500 text-center">⏳ Loading recommendations...</p>
+                      <div className="flex items-center justify-center h-screen">
+                      <div className="text-gray-500 text-center text-2xl font-semibold">
+                      <ClipLoader
+        color="blue"
+        loading={isLoading}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />                       </div>
+                   </div>
+       
+          // <p className="text-gray-500 text-center">⏳ Loading recommendations...</p>
         ) : error ? (
-          <p className="text-red-500 text-center">❌ Error loading recommendations.</p>
+          <div className="flex items-center justify-center h-screen">
+          <p className="text-gray-500 text-center text-4xl font-semibold">
+          ❌ Error loading recommendations.           </p>
+       </div>
+
+          // <p className="text-red-500 text-center">❌ Error loading recommendations.</p>
         ) : matchingDrones.length === 0 ? (
-          <p className="text-gray-500 text-center">⚠️ No matching drones found.</p>
+            <div className="flex items-center justify-center h-screen">
+               <p className="text-gray-500 text-center text-4xl font-semibold">
+                  ⚠️ No matching drones found. Try searching again.
+                </p>
+            </div>
         ) : (
           <div className="space-y-6">
             {matchingDrones.map((drone) => (
