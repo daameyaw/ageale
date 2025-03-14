@@ -5,6 +5,9 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 
+// Import a default background image - you can change this to any image you want
+import backgroundImage from '../assets/contact-us-customer-support.webp'; // Create this file or use an existing image
+
 const Contact = () => {
   const theme = useTheme();
   const [formData, setFormData] = useState({
@@ -43,10 +46,29 @@ const Contact = () => {
     <Box
       sx={{
         py: 10,
-        backgroundColor: 'white',
+        backgroundImage: `url(${backgroundImage})`, // Use the background image
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.4)', // Significantly reduced from 0.7 to 0.4
+          zIndex: 1
+        }
       }}
     >
-      <Container maxWidth="lg">
+      <Container 
+        maxWidth="lg"
+        sx={{
+          position: 'relative',
+          zIndex: 2 // Position above the overlay
+        }}
+      >
         <Grid container spacing={6}>
           <Grid item xs={12} md={5}>
             <motion.div
@@ -59,9 +81,9 @@ const Contact = () => {
                 variant="h2"
                 component="h2"
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 500, // Reduced from 700
                   mb: 3,
-                  color: theme.palette.primary.main,
+                  color: '#000000', // Changed to black
                 }}
               >
                 Contact Us
@@ -70,7 +92,7 @@ const Contact = () => {
                 variant="body1"
                 sx={{
                   mb: 4,
-                  color: theme.palette.text.secondary,
+                  color: '#000000', // Changed to black
                 }}
               >
                 Have questions about our products or solutions? Reach out to our team and we'll be happy to help you find the right drone solution for your needs.
@@ -78,12 +100,12 @@ const Contact = () => {
 
               <Box sx={{ mb: 4 }}>
                 <Box sx={{ display: 'flex', mb: 3 }}>
-                  <LocationOnIcon sx={{ color: theme.palette.primary.main, mr: 2 }} />
+                  <LocationOnIcon sx={{ color: '#000000', mr: 2 }} /> {/* Changed to black */}
                   <Box>
-                    <Typography variant="h6" sx={{ mb: 0.5 }}>
+                    <Typography variant="h6" sx={{ mb: 0.5, color: '#000000' }}> {/* Changed to black */}
                       Our Headquarters
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" sx={{ color: '#000000' }}> {/* Changed to black */}
                       AgEagle Aerial Systems Inc.<br />
                       8863 E. 34th St. N.<br />
                       Wichita, KS 67226<br />
@@ -93,24 +115,24 @@ const Contact = () => {
                 </Box>
 
                 <Box sx={{ display: 'flex', mb: 3 }}>
-                  <EmailIcon sx={{ color: theme.palette.primary.main, mr: 2 }} />
+                  <EmailIcon sx={{ color: '#000000', mr: 2 }} /> {/* Changed to black */}
                   <Box>
-                    <Typography variant="h6" sx={{ mb: 0.5 }}>
+                    <Typography variant="h6" sx={{ mb: 0.5, color: '#000000' }}> {/* Changed to black */}
                       Email Us
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" sx={{ color: '#000000' }}> {/* Changed to black */}
                       info@ageagle.com
                     </Typography>
                   </Box>
                 </Box>
 
                 <Box sx={{ display: 'flex' }}>
-                  <PhoneIcon sx={{ color: theme.palette.primary.main, mr: 2 }} />
+                  <PhoneIcon sx={{ color: '#000000', mr: 2 }} /> {/* Changed to black */}
                   <Box>
-                    <Typography variant="h6" sx={{ mb: 0.5 }}>
+                    <Typography variant="h6" sx={{ mb: 0.5, color: '#000000' }}> {/* Changed to black */}
                       Call Us
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" sx={{ color: '#000000' }}> {/* Changed to black */}
                       +1 (844) 840-6697
                     </Typography>
                   </Box>
@@ -132,6 +154,7 @@ const Contact = () => {
                   p: { xs: 3, md: 4 },
                   borderRadius: 3,
                   boxShadow: '0 8px 40px rgba(0,0,0,0.08)',
+                  backgroundColor: 'white',
                 }}
               >
                 <Typography
@@ -139,8 +162,8 @@ const Contact = () => {
                   component="h3"
                   sx={{
                     mb: 3,
-                    fontWeight: 600,
-                    color: theme.palette.primary.main,
+                    fontWeight: 500, // Reduced from 600
+                    color: '#000000', // Changed to black
                   }}
                 >
                   Send Us a Message
@@ -208,14 +231,18 @@ const Contact = () => {
                       <Button
                         type="submit"
                         variant="contained"
-                        color="primary"
                         size="large"
                         sx={{
                           mt: 2,
                           px: 4,
                           py: 1.5,
                           textTransform: 'none',
-                          fontWeight: 600,
+                          fontWeight: 500, // Reduced from 600
+                          backgroundColor: '#000000', // Black button
+                          color: 'white',
+                          '&:hover': {
+                            backgroundColor: '#333333',
+                          }
                         }}
                       >
                         Send Message

@@ -3,7 +3,9 @@ import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Button 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import { agriculturePlaceholder, defensePlaceholder, surveyingPlaceholder } from '../../placeholderImages';
+import agricimg from '../assets/agriculture.jpeg';
+import defenseimg from '../assets/defense.jpeg';
+import surveyimg from '../assets/survey_and_mapping .jpeg';
 
 const Solutions = () => {
   const theme = useTheme();
@@ -12,19 +14,19 @@ const Solutions = () => {
     {
       title: 'Agriculture',
       description: 'Optimize crop management with precision agriculture solutions. Monitor plant health, detect stress, and improve yields with aerial insights.',
-      image: agriculturePlaceholder,
+      image: agricimg,
       link: '/solutions/agriculture'
     },
     {
       title: 'Defense & Security',
       description: 'Tactical aerial intelligence for defense and security operations. Secure, reliable, and compliant solutions for mission-critical applications.',
-      image: defensePlaceholder,
+      image: defenseimg,
       link: '/solutions/defense'
     },
     {
       title: 'Surveying & Mapping',
       description: 'High-precision aerial surveying for construction, mining, and infrastructure projects. Generate accurate maps, 3D models, and terrain analysis.',
-      image: surveyingPlaceholder,
+      image: surveyimg,
       link: '/solutions/surveying'
     }
   ];
@@ -63,9 +65,9 @@ const Solutions = () => {
           component="h2"
           align="center"
           sx={{
-            fontWeight: 700,
+            fontWeight: 500,
             mb: 2,
-            color: theme.palette.primary.main
+            color: '#000000'
           }}
         >
           Industry Solutions
@@ -96,14 +98,15 @@ const Solutions = () => {
                 <motion.div variants={itemVariants}>
                   <Card
                     sx={{
-                      height: '100%',
+                      height: '500px',
                       display: 'flex',
                       flexDirection: 'column',
                       transition: 'transform 0.3s, box-shadow 0.3s',
                       '&:hover': {
                         transform: 'translateY(-8px)',
                         boxShadow: '0 12px 30px rgba(0,0,0,0.12)'
-                      }
+                      },
+                      width: '100%'
                     }}
                   >
                     <CardMedia
@@ -111,32 +114,62 @@ const Solutions = () => {
                       height="240"
                       image={solution.image}
                       alt={solution.title}
+                      sx={{
+                        objectFit: 'cover',
+                        maxHeight: '240px',
+                        minHeight: '240px'
+                      }}
                     />
-                    <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                      <Typography
-                        gutterBottom
-                        variant="h4"
-                        component="h3"
-                        sx={{ fontWeight: 600, color: theme.palette.primary.main }}
-                      >
-                        {solution.title}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        color="text.secondary"
-                        sx={{ mb: 3 }}
-                      >
-                        {solution.description}
-                      </Typography>
+                    <CardContent sx={{ 
+                      height: '260px',
+                      p: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant="h4"
+                          component="h3"
+                          sx={{ 
+                            fontWeight: 400, 
+                            color: '#000000',
+                            fontSize: { xs: '1.5rem', md: '1.75rem' },
+                            lineHeight: 1.2,
+                            height: '60px',
+                            mb: 2,
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}
+                        >
+                          {solution.title}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          color="text.secondary"
+                          sx={{ 
+                            mb: 3,
+                            height: '80px',
+                            overflow: 'auto'
+                          }}
+                        >
+                          {solution.description}
+                        </Typography>
+                      </div>
                       <Button
                         component={Link}
                         to={solution.link}
-                        variant="outlined"
-                        color="primary"
+                        variant="contained"
                         sx={{
-                          mt: 'auto',
+                          width: 'fit-content',
                           textTransform: 'none',
-                          fontWeight: 600
+                          fontWeight: 600,
+                          backgroundColor: '#000000',
+                          color: '#ffffff',
+                          '&:hover': {
+                            backgroundColor: '#333333',
+                          }
                         }}
                       >
                         Learn More

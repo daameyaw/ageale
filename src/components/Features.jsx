@@ -3,8 +3,12 @@ import { Box, Container, Typography, Grid, Card, CardContent, CardMedia, Button 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import { dronePlaceholder, sensorPlaceholder, softwarePlaceholder } from '../../placeholderImages';
-// import { logoWhitePlaceholder } from '../../placeholderImages';
+// import { dronePlaceholder, sensorPlaceholder, softwarePlaceholder } from '../../placeholderImages';
+
+// Import actual images from assets folder
+import droneImage from '../assets/drone.jpeg'; // Changed from relative path to src/assets
+import sensorImage from '../assets/sensor.png'; // Changed from relative path to src/assets
+import softwareImage from '../assets/powerfulDroneSoftware.jpeg'; // Changed from relative path to src/assets
 
 
 const Features = () => {
@@ -13,20 +17,20 @@ const Features = () => {
   const featureData = [
     {
       title: 'Professional Drones',
-      description: 'Fixed-wing drones designed for professional mapping and surveying with extended flight times and coverage capabilities.',
-      image: dronePlaceholder,
+      description: 'Fixed-wing drones designed for professional mapping and surveying.',
+      image: droneImage, // Updated to use real image
       link: '/drones'
     },
     {
       title: 'Advanced Sensors',
       description: 'High-precision sensors for RGB, thermal, and multispectral imaging to capture the data you need for analysis.',
-      image: sensorPlaceholder,
+      image: sensorImage, // Updated to use real image
       link: '/sensors'
     },
     {
       title: 'Powerful Software',
       description: 'End-to-end software solutions for flight planning, data processing, and analytics to transform raw data into actionable insights.',
-      image: softwarePlaceholder,
+      image: softwareImage, // Updated to use real image
       link: '/software'
     }
   ];
@@ -65,9 +69,9 @@ const Features = () => {
           component="h2"
           align="center"
           sx={{
-            fontWeight: 700,
+            fontWeight: 500,
             mb: 6,
-            color: theme.palette.primary.main
+            color: '#000000'
           }}
         >
           Our Products
@@ -85,14 +89,15 @@ const Features = () => {
                 <motion.div variants={itemVariants}>
                   <Card
                     sx={{
-                      height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
                       transition: 'transform 0.3s, box-shadow 0.3s',
                       '&:hover': {
                         transform: 'translateY(-8px)',
                         boxShadow: '0 12px 30px rgba(0,0,0,0.12)'
-                      }
+                      },
+                      height: '500px',
+                      width: '100%'
                     }}
                   >
                     <CardMedia
@@ -100,32 +105,63 @@ const Features = () => {
                       height="240"
                       image={feature.image}
                       alt={feature.title}
+                      sx={{
+                        objectFit: 'cover',
+                        height: '240px',
+                        maxHeight: '240px',
+                        minHeight: '240px'
+                      }}
                     />
-                    <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                      <Typography
-                        gutterBottom
-                        variant="h4"
-                        component="h3"
-                        sx={{ fontWeight: 600, color: theme.palette.primary.main }}
-                      >
-                        {feature.title}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        color="text.secondary"
-                        sx={{ mb: 3 }}
-                      >
-                        {feature.description}
-                      </Typography>
+                    <CardContent sx={{ 
+                      height: '260px',
+                      p: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant="h4"
+                          component="h3"
+                          sx={{ 
+                            fontWeight: 400,
+                            color: '#000000',
+                            fontSize: { xs: '1.5rem', md: '1.75rem' },
+                            lineHeight: 1.2,
+                            height: '60px',
+                            mb: 2.5,
+                            display: 'flex',
+                            alignItems: 'center'
+                          }}
+                        >
+                          {feature.title}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          color="text.secondary"
+                          sx={{ 
+                            mb: 3,
+                            height: '60px',
+                            overflow: 'auto'
+                          }}
+                        >
+                          {feature.description}
+                        </Typography>
+                      </div>
                       <Button
                         component={Link}
                         to={feature.link}
-                        variant="outlined"
-                        color="primary"
+                        variant="contained"
                         sx={{
-                          mt: 'auto',
+                          width: 'fit-content',
                           textTransform: 'none',
-                          fontWeight: 600
+                          fontWeight: 600,
+                          backgroundColor: '#000000',
+                          color: '#ffffff',
+                          '&:hover': {
+                            backgroundColor: '#333333',
+                          }
                         }}
                       >
                         Learn More

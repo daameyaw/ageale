@@ -3,7 +3,12 @@ import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import { dronePlaceholder } from '../../placeholderImages';
+// import { dronePlaceholder } from '../../placeholderImages';
+
+// Import actual drone image from assets
+import droneImage from '../assets/drone1.jpg';
+// Import background image for hero section
+import heroBackground from '../assets/mainbg.jpg'; // Add your preferred background image
 
 const Hero = () => {
   const theme = useTheme();
@@ -11,17 +16,37 @@ const Hero = () => {
   return (
     <Box
       sx={{
-        background: 'white',
-        color: theme.palette.text.primary,
+        background: '#222222',
+        color: 'white',
         minHeight: '90vh',
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
-        pt: { xs: 8, md: 0 }
+        pt: { xs: 8, md: 0 },
+        // Add background image
+        backgroundImage: `url(${heroBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark overlay for readability
+          zIndex: 1
+        }
       }}
     >
-      <Container maxWidth="lg">
+      <Container 
+        maxWidth="lg"
+        sx={{ 
+          position: 'relative',
+          zIndex: 2 // Place above overlay
+        }}
+      >
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={6}>
             <motion.div
@@ -37,7 +62,7 @@ const Hero = () => {
                   fontSize: { xs: '2.0rem', md: '3.0rem' },
                   mb: 3,
                   lineHeight: 1.2,
-                  color: theme.palette.primary.main
+                  color: '#ffffff'
                 }}
               >
                 Drones, Sensors and Software for Automated Aerial Intelligence
@@ -47,7 +72,7 @@ const Hero = () => {
                 sx={{
                   mb: 6,
                   maxWidth: '600px',
-                  color: theme.palette.text.secondary,
+                  color: '#b0c4de',
                   fontWeight: 400,
                   lineHeight: 1.6
                 }}
@@ -66,6 +91,10 @@ const Hero = () => {
                     borderRadius: '24px',
                     textTransform: 'none',
                     fontWeight: 600,
+                    backgroundColor: '#3498db',
+                    '&:hover': {
+                      backgroundColor: '#2980b9'
+                    }
                   }}
                 >
                   Explore Solutions
@@ -81,9 +110,15 @@ const Hero = () => {
                     borderRadius: '24px',
                     textTransform: 'none',
                     fontWeight: 600,
+                    borderColor: '#3498db',
+                    color: '#ffffff',
+                    '&:hover': {
+                      borderColor: '#2980b9',
+                      backgroundColor: 'rgba(52, 152, 219, 0.1)'
+                    }
                   }}
                 >
-                 ✨ Let's help you find a drone
+                  ✨ Let's help you find a drone
                 </Button>
               </Box>
             </motion.div>
@@ -97,7 +132,7 @@ const Hero = () => {
             >
               <Box
                 component="img"
-                src={dronePlaceholder}
+                src={droneImage}
                 alt="AgEagle eBee X Drone"
                 sx={{
                   width: '100%',

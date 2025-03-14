@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ backgroundColor: 'white', color: theme.palette.text.primary, boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+      <AppBar position="fixed" sx={{ backgroundColor: '#000000', color: 'white', boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
         <Toolbar sx={{ justifyContent: 'space-between', height: '80px' }}>
           <Typography 
             variant="h6" 
@@ -30,8 +30,8 @@ const Navbar = () => {
             to="/" 
             sx={{ 
               textDecoration: 'none', 
-              color: theme.palette.primary.main,
-              fontWeight: 'bold',
+              color: 'white',
+              fontWeight: '500',
               fontSize: '1.5rem',
               display: 'flex',
               alignItems: 'center'
@@ -68,9 +68,9 @@ const Navbar = () => {
                   color="inherit"
                   sx={{ 
                     mx: 1,
-                    fontWeight: 500,
+                    fontWeight: 400,
                     '&:hover': {
-                      color: theme.palette.primary.main
+                      color: 'rgba(255, 255, 255, 0.8)'
                     }
                   }}
                 >
@@ -81,13 +81,17 @@ const Navbar = () => {
                 component={Link}
                 to="/contact"
                 variant="contained"
-                color="primary"
                 sx={{ 
                   ml: 3,
                   px: 3,
                   borderRadius: '24px',
                   textTransform: 'none',
-                  fontWeight: 600
+                  fontWeight: 500,
+                  backgroundColor: 'white',
+                  color: 'black',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)'
+                  }
                 }}
               >
                 Contact Us
@@ -104,7 +108,7 @@ const Navbar = () => {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         PaperProps={{
-          sx: { width: '250px' }
+          sx: { width: '250px', backgroundColor: '#000000', color: 'white' }
         }}
       >
         <List sx={{ pt: 2 }}>
@@ -119,7 +123,7 @@ const Navbar = () => {
                 <ListItemText 
                   primary={item.name}
                   primaryTypographyProps={{
-                    fontWeight: 600
+                    fontWeight: 500
                   }}
                 />
               </ListItem>
@@ -132,7 +136,12 @@ const Navbar = () => {
                   onClick={handleDrawerToggle}
                   sx={{ pl: 4 }}
                 >
-                  <ListItemText primary={subItem} />
+                  <ListItemText 
+                    primary={subItem}
+                    primaryTypographyProps={{
+                      fontWeight: 400
+                    }}
+                  />
                 </ListItem>
               ))}
             </React.Fragment>
@@ -147,8 +156,8 @@ const Navbar = () => {
             <ListItemText 
               primary="Contact Us"
               primaryTypographyProps={{
-                fontWeight: 600,
-                color: theme.palette.primary.main
+                fontWeight: 500,
+                color: 'white'
               }}
             />
           </ListItem>
