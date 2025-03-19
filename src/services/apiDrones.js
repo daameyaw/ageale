@@ -53,6 +53,7 @@ function calculateDroneScore(drone, userPreferences) {
   return score;
 }
 
+// Function to get drones matching user preferences
 export async function getMatchingDrones(userPreferences) {
   const { data, error } = await supabase
     .from("Drones")
@@ -78,46 +79,48 @@ export async function getMatchingDrones(userPreferences) {
     return [];
   }
 
-  // Rank the matching drones
-  const rankedDrones = data.map(drone => ({
-    ...drone,
-    score: calculateDroneScore(drone, userPreferences)
-  }));
-
-  const sortedDrones = rankedDrones.sort((a, b) => b.score - a.score);
-
-  console.log("Ranked" , rankedDrones)
-
-  // Sort by score in descending order
-  return sortedDrones;
-  // return data
+  return data; // Return the matching drones
 }
 
-// export async function getMatchingDrones(userPreferences) {
-//   const { data, error } = await supabase
-//     .from("drones")
-//     .select("*")
-//     .or(
-//       `
-//       industry.ilike.%${userPreferences.industry}%,
-//       purpose.ilike.%${userPreferences.purpose}%,
-//       budget_range.ilike.%${userPreferences.budget_range}%,
-//       experience_level.ilike.%${userPreferences.experience_level}%,
-//       camera_quality.ilike.%${userPreferences.camera_quality}%,
-//       obstacle_avoidance.eq.${userPreferences.obstacle_avoidance},
-//       portability.ilike.%${userPreferences.portability}%,
-//       live_streaming.eq.${userPreferences.live_streaming},
-//       night_vision.eq.${userPreferences.night_vision}
-//       `
-//     )
-//     .filter("flight_time", "gte", userPreferences.flight_time)
-//     .filter("flight_range", "gte", userPreferences.flight_range)
-//     .filter("payload_capacity", "gte", userPreferences.payload_capacity);
+// Function to rank drones using AI model
+export const getRankedDrones = async (drones, userPreferences) => {
+  try {
+    // Rank drones based on AI predictions
+    const rankedDrones = await Promise.all(
+      drones.map(async (drone) => {
+        const res = await fetch("http://127.0.0.1:8000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            flight_time: drone.flight_time || 0,  // Default value if missing
+            flight_range: drone.flight_range || 0,
+            payload_capacity: drone.payload_capacity || 0,
+            wind_resistance: drone.wind_resistance || 0,
+            experience_level: drone.experience_level || 0,
+            price: drone.price || 0
+          }),
+        });
 
-//   if (error) {
-//     console.error("Error fetching drones:", error);
-//     return [];
-//   }
+        const data = await res.json();
+        return { ...drone, ranking_score: data.ranking_score };
+      })
+    );
 
-//   return data;
-// }
+    // Sort drones by AI ranking score
+    return rankedDrones.sort((a, b) => b.ranking_score - a.ranking_score);
+  } catch (err) {
+    console.error("Error ranking drones:", err);
+    return [];
+  }
+};
+
+// Combine both functions: Get matching drones and then rank them
+export const getRankedMatchingDrones = async (userPreferences) => {
+  const drones = await getMatchingDrones(userPreferences); // Get matching drones based on user preferences
+  if (drones.length === 0) {
+    return []; // No matching drones, return empty list
+  }
+
+  const rankedDrones = await getRankedDrones(drones, userPreferences); // Rank the matching drones
+  return rankedDrones; // Return ranked drones
+};

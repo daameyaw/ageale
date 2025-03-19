@@ -209,7 +209,7 @@ function Form() {
   };
 
   // Generate one drone
-  const tenDrones = generateMultipleDroneData(15);
+  const tenDrones = generateMultipleDroneData(30);
 
   async function handleUploadDrones() {
     try {
@@ -230,8 +230,8 @@ function Form() {
   }
 
   return (
-<div className=" bg-[url('/drone.jpg')] bg-cover bg-center h-full w-full">  
-    <div className="w-[80%] mx-auto    mt-12">
+<div className=" bg-[url('/drone.jpg')] bg-cover bg-center  min-h-screen w-full ">  
+    <div className="w-[80%] mx-auto    ">
         <Stepper activeStep={activeStep}>
           {steps.map((label) => (
             <Step key={label}>
@@ -241,7 +241,7 @@ function Form() {
         </Stepper>
       </div>
 
-      <div className="w-[80%] mx-auto min-h-[80vh] bg-white shadow-2xl rounded-lg mt-6">
+      <div className="w-[80%] mx-auto min-h-[80vh] bg-white shadow-2xl rounded-lg mt-18">
         {activeStep === 0 && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="border-b-2 border-gray-200">
@@ -282,11 +282,11 @@ function Form() {
                     Select an industry
                   </option>
                   <option value="agriculture">Agriculture</option>
-                  <option value="construction">Construction</option>
+                  {/* <option value="construction">Construction</option> */}
                   <option value="defense">Defense</option>
-                  <option value="real_estate">Real Estate</option>
-                  <option value="film_media">Film & Media</option>
-                  <option value="surveying">Surveying & Mapping</option>
+                  {/* <option value="real_estate">Real Estate</option> */}
+                  {/* <option value="film_media">Film & Media</option> */}
+                  {/* <option value="surveying">Surveying & Mapping</option> */}
                   <option value="research">Research & Education</option>
                 </select>
                 {errors.industry && (
@@ -352,7 +352,7 @@ function Form() {
                   <option value="" disabled>
                     Select what you intend to use the drone for...
                   </option>
-                  <option value="film">Aerial Photography & Videography</option>
+                  {/* <option value="film">Aerial Photography & Videography</option> */}
                   <option value="surveying">Surveying & Mapping</option>
                   <option value="agriculture">Agriculture & Farming</option>
                   <option value="research">Research </option>
@@ -375,8 +375,8 @@ function Form() {
                   </option>
                   <option value="urban_areas">Urban Areas</option>
                   <option value="rural_fields">Rural & Open Fields</option>
-                  <option value="forests_mountains">Forests & Mountains</option>
-                  <option value="industrial_sites">Industrial Sites</option>
+                  {/* <option value="forests_mountains">Forests & Mountains</option>
+                  <option value="industrial_sites">Industrial Sites</option> */}
                   {/* <option value="forestry">Forestry</option> */}
                 </select>
                 {errors.environment && (

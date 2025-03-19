@@ -5,25 +5,24 @@ const generateDroneData = () => ({
   company_name: faker.company.name(),
   company_email: faker.internet.email(),
   industry: faker.helpers.arrayElement([
-    "agriculture",
+    // "agriculture",
     // "construction",
-    // "defense",
+    "defense",
     // "real_estate",
     // "film_media",
     // "surveying",
-    // "research",
+    "research",
   ]),
 
   // Drone Requirements
   purpose: faker.helpers.arrayElement([
-    // "film",
-    // "surveying",
-    // "agriculture",
-    "research",
+    "surveying",
+    "agriculture",
+    // "research",
   ]),
   operating_environment: faker.helpers.arrayElement([
     "urban_areas",
-    // "rural_fields",
+    "rural_fields",
     // "forests_mountains",
     // "industrial_sites",
   ]),
@@ -34,9 +33,9 @@ const generateDroneData = () => ({
   experience_level: faker.number.int({ min: 1, max: 4 }),
 
   // Technical Specs
-  flight_time: Math.floor(faker.number.int({ min: 4, max: 120 }) / 10) * 10,
+  flight_time: faker.number.int({ min: 1, max: 12 }) * 10, 
 
-  flight_range: Math.floor(faker.number.int({ min: 5, max: 50 }) / 1) * 5,
+  flight_range: faker.number.int({ min: 1, max: 10 }) * 5, 
 
   camera_quality: faker.helpers.arrayElement([0, 720, 1080, 4000, 6000, -1]),
 
@@ -54,7 +53,7 @@ const generateDroneData = () => ({
     faker.number.int({ min: 1, max: 5 })
   ),
   portability: faker.helpers.arrayElement([
-    // "Compact & Foldable",
+    "Compact & Foldable",
     "Regular Drone",
   ]),
   connectivity_options: faker.helpers.arrayElements(

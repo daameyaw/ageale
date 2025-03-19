@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useMatchDrones } from "../features/Drones/useMatchDrones";
+import { useRankedDrones } from "../features/Drones/useRankedDrones";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import React from "react";
@@ -9,7 +9,7 @@ export default function ResultsPage() {
   const navigate = useNavigate();
   const formData = location.state?.formData;
 
-  const { isLoading, matchingDrones, error } = useMatchDrones(formData);
+  const { isLoading, rankedDrones, error } = useRankedDrones(formData);
 
   const cameraQualityLabels = {
     0: "No camera needed",
@@ -62,7 +62,7 @@ export default function ResultsPage() {
        </div>
 
           // <p className="text-red-500 text-center">❌ Error loading recommendations.</p>
-        ) : matchingDrones.length === 0 ? (
+        ) : rankedDrones.length === 0 ? (
             <div className="flex items-center justify-center h-screen">
                <p className="text-gray-500 text-center text-4xl font-semibold">
                   ⚠️ No matching drones found. Try searching again.
@@ -70,7 +70,7 @@ export default function ResultsPage() {
             </div>
         ) : (
           <div className="space-y-6">
-            {matchingDrones.map((drone) => (
+            {rankedDrones.map((drone) => (
               <div
                 key={drone.id}
                 className="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row items-center"
@@ -95,6 +95,9 @@ export default function ResultsPage() {
                       🎯 <span className="font-semibold">Purpose:</span>{" "}
                        {drone.purpose.charAt(0).toUpperCase() + drone.purpose.slice(1)}
                  </p>
+                 {/* <p>
+                  <span>{drone.id}</span>
+                 </p> */}
                     <p className="text-gray-700">
                       💰 <span className="font-semibold">Price:</span> ${drone.price}
                     </p>
@@ -112,7 +115,7 @@ export default function ResultsPage() {
                       📦 <span className="font-semibold">Payload Capacity:</span> {drone.payload_capacity} g
                     </p>
                     <p className="text-gray-700 col-span-2">
-                      ⭐ <span className="font-semibold">Overall Score:</span> {drone.score}
+                      ⭐ <span className="font-semibold">Overall Score:</span> {drone.ranking_score.toFixed(2)}
                     </p>
                   </div>
 

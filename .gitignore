@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.pyc
+*.pth
+*.hash
+*.dist-info
+*.pyi
+.typed
+.dll
+.pyx
+__pycache__/
+tf_env/
+
+

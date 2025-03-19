@@ -16,6 +16,12 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 // import theme from './theme';
 
+import Navigation from './components/Navigation';
+import About from './pages/About';
+import Services from './pages/Services';
+import Home from './pages/Home';
+import Learn from './pages/Learn';
+
 
 // Create a client
 const queryClient = new QueryClient();
@@ -24,50 +30,21 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-      <CssBaseline />
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar />
-
+      <div className="min-h-screen bg-white">
+      <Navigation />
       <Routes>
-              <Route path="/" element={
-                <>
-                  <Hero />
-                  <Features />
-                  <Solutions />
-                  <Contact />
-                </>
-              } />
-              <Route path="/drones/*" element={
-                <>
-                  <Hero />
-                  <Features />
-                </>
-              } />
-              <Route path="/sensors/*" element={
-                <>
-                  <Hero />
-                  <Features />
-                </>
-              } />
-              <Route path="/software/*" element={
-                <>
-                  <Hero />
-                  <Features />
-                </>
-              } />
-              <Route path="/solutions/*" element={
-                <>
-                  <Solutions />
-                  <Features />
-                </>
-              } />
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/learn" element={<Learn />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/form" element={<Form />} />
               <Route path="/results" element={<ResultsPage />} />
+      </Routes>
+    </div>
 
-            </Routes>
 
-        </div>
+
       </BrowserRouter>
     </QueryClientProvider>
   );
