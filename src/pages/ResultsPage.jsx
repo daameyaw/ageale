@@ -144,9 +144,9 @@ export default function ResultsPage() {
                   </div>
 
                   {/* 🔍 Button for More Details */}
-                  <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
-                    🔍 View More Details
-                  </button>
+                  <button onClick={() => navigate("/contact")} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+  📞 Contact Us
+</button>
                 </div>
               </div>
             ))}

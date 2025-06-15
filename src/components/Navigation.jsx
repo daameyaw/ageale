@@ -11,7 +11,7 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="text-2xl font-bold text-blue-600">SenseFly</Link>
+            <Link to="/" className="text-2xl font-bold text-blue-600">Aerius</Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -20,9 +20,7 @@ export default function Navigation() {
             <Link to="/services" className="text-gray-700 hover:text-blue-600">Services</Link>
             <Link to="/about" className="text-gray-700 hover:text-blue-600">About</Link>
             <Link to="/learn" className="text-gray-700 hover:text-blue-600">Learn</Link>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
-              Contact Us
-            </button>
+            <Link to="/contact" className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">Contact</Link>
           </div>
 
           {/* Mobile menu button */}
