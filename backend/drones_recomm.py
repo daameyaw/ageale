@@ -14,6 +14,9 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 # Initialize Supabase client
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+print("URL:", SUPABASE_URL)
+
+
 # Fetch data from the "Drones" table
 response = supabase.table("Drones").select("*").execute()
 
