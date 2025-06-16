@@ -16,8 +16,9 @@ app = FastAPI()
 
 # Allow CORS for specific origins
 origins = [
-    "http://localhost:5173",  # React frontend
-    "http://127.0.0.1:5173",  # React frontend (if running on a different port)
+    "http://localhost:5174",  # React frontend
+    "http://127.0.0.1:5174",  # React frontend (if running on a different port)
+    
 ]
 
 # Add CORS middleware

@@ -134,7 +134,7 @@ function Form() {
     queryFn: getDrones,
   });
 
-  console.log(drones);
+  // console.log(drones);
 
   const [activeStep, setActiveStep] = useState(0);
   const {
